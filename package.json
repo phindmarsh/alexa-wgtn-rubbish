@@ -1,0 +1,36 @@
+{
+  "name": "alexa-wgtn-rubbish",
+  "version": "1.0.0",
+  "description": "A skill to get the next rubbish and recycling collection date in Wellington",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "alexa", "skill", "wellington", "rubbish", "recycling"
+  ],
+  "author": {
+    "name": "Patrick Hindmarsh",
+    "email": "patrick@hindmar.sh"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@google/maps": "^0.4.6",
+    "ask-sdk-core": "^2.0.0",
+    "ask-sdk-model": "^1.0.0",
+    "cheerio": "^1.0.0-rc.2",
+    "got": "^8.3.1",
+    "moment": "^2.22.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "chai-as-promised": "^7.1.1",
+    "chai-moment": "^0.1.0",
+    "mocha": "^5.2.0",
+    "nock": "^9.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phindmarsh/alexa-wgtn-rubbish"
+  }
+}

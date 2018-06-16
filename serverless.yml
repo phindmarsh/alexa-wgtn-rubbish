@@ -1,0 +1,18 @@
+
+service: alexa-wgtn-rubbish
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  profile: personal
+
+functions:
+  skill:
+    handler: handler.handler
+    events:
+      - alexaSkill: amzn1.ask.skill.193bd5d0-111c-48e8-8fd5-25777c77d5b9
+    environment:
+      WCC_API_HOST: https://wellington.govt.nz
+      WCC_API_STREETS_PATH: /layouts/wcc/GeneralLayout.aspx/GetRubbishCollectionStreets
+      WCC_API_COLLECTION_SCHEDULE_PATH: /services/environment-and-waste/rubbish-and-recycling/collection-days/components/collection-search-results
+      GCP_GEOCODE_API_KEY: ${ssm:alexa-wgtn-rubbish-gcp-key}
