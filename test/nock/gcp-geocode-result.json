@@ -1,0 +1,64 @@
+{
+    "results" : [
+       {
+          "address_components" : [
+             {
+                "long_name" : "1",
+                "short_name" : "1",
+                "types" : [ "street_number" ]
+             },
+             {
+                "long_name" : "Test Street",
+                "short_name" : "Test St",
+                "types" : [ "route" ]
+             },
+             {
+                "long_name" : "Suburb",
+                "short_name" : "Suburb",
+                "types" : [ "political", "sublocality", "sublocality_level_1" ]
+             },
+             {
+                "long_name" : "Wellington",
+                "short_name" : "Wellington",
+                "types" : [ "locality", "political" ]
+             },
+             {
+                "long_name" : "Wellington",
+                "short_name" : "Wellington",
+                "types" : [ "administrative_area_level_1", "political" ]
+             },
+             {
+                "long_name" : "New Zealand",
+                "short_name" : "NZ",
+                "types" : [ "country", "political" ]
+             },
+             {
+                "long_name" : "1111",
+                "short_name" : "1111",
+                "types" : [ "postal_code" ]
+             }
+          ],
+          "formatted_address" : "1 Test Street, Suburb, Wellington 1111, New Zealand",
+          "geometry" : {
+             "location" : {
+                "lat" : -41.2900000,
+                "lng" : 174.770000
+             },
+             "location_type" : "ROOFTOP",
+             "viewport" : {
+                "northeast" : {
+                   "lat" : -41.2891,
+                   "lng" : 174.7758
+                },
+                "southwest" : {
+                   "lat" : -41.2918,
+                   "lng" : 174.7731
+                }
+             }
+          },
+          "place_id" : "xxxxxxxxxxxxxxxxx",
+          "types" : [ "street_address" ]
+       }
+    ],
+    "status" : "OK"
+ }

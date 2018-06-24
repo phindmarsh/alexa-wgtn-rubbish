@@ -7,7 +7,11 @@
     "test": "mocha"
   },
   "keywords": [
-    "alexa", "skill", "wellington", "rubbish", "recycling"
+    "alexa",
+    "skill",
+    "wellington",
+    "rubbish",
+    "recycling"
   ],
   "author": {
     "name": "Patrick Hindmarsh",
@@ -17,6 +21,7 @@
   "dependencies": {
     "@google/maps": "^0.4.6",
     "ask-sdk-core": "^2.0.0",
+    "ask-sdk-dynamodb-persistence-adapter": "^2.0.7",
     "ask-sdk-model": "^1.0.0",
     "cheerio": "^1.0.0-rc.2",
     "got": "^8.3.1",

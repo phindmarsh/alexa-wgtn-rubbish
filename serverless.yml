@@ -5,6 +5,18 @@ provider:
   name: aws
   runtime: nodejs8.10
   profile: personal
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
   skill:
@@ -16,3 +28,22 @@ functions:
       WCC_API_STREETS_PATH: /layouts/wcc/GeneralLayout.aspx/GetRubbishCollectionStreets
       WCC_API_COLLECTION_SCHEDULE_PATH: /services/environment-and-waste/rubbish-and-recycling/collection-days/components/collection-search-results
       GCP_GEOCODE_API_KEY: ${ssm:alexa-wgtn-rubbish-gcp-key}
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}

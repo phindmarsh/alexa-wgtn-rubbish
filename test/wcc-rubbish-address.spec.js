@@ -16,20 +16,32 @@ const apiEndpoints = {
 
 describe('Get Street ID', () => {
 
+    it('should complete a missing streetId', async () => {
+        nock(testApiEndpoints.host).post(testApiEndpoints.fetchStreetId).reply(200, addressMatches.matchOne);
+        const matchId = 1111;
+        const address = { streetName: 'Test Street', suburb: 'Suburb' };
+        const collection = new CollectionSchedule(address, apiEndpoints);
+        const fullAddress = await collection.loadFullAddress(address);
+
+        expect(fullAddress.streetId).to.be.equal(matchId);
+    });
+
     it('should fetch a matching streetId', async () => {
         nock(testApiEndpoints.host).post(testApiEndpoints.fetchStreetId).reply(200, addressMatches.matchOne);
-        var matchId = 1111;
-        var collection = new CollectionSchedule('Test Street', 'Suburb', apiEndpoints);
-        var streetId = await collection.fetchStreetId(collection.streetName, collection.suburb);
+        const matchId = 1111;
+        const address = { streetName: 'Test Street', suburb: 'Suburb' };
+        const collection = new CollectionSchedule(address, apiEndpoints);
+        const streetId = await collection.fetchStreetId(address.streetName, address.suburb);
 
         expect(streetId).to.be.equal(matchId);
     });
 
     it('should find the correct streetId for a street with multiple suburbs', async () => {
         nock(testApiEndpoints.host).post(testApiEndpoints.fetchStreetId).reply(200, addressMatches.matchTwo);
-        var matchId = 2222;
-        var collection = new CollectionSchedule('Test Street', 'Nextburb', apiEndpoints);
-        var streetId = await collection.fetchStreetId(collection.streetName, collection.suburb);
+        const matchId = 2222;
+        const address = { streetName: 'Test Street', suburb: 'Nextburb' };
+        const collection = new CollectionSchedule(address, apiEndpoints);
+        const streetId = await collection.fetchStreetId(address.streetName, address.suburb);
 
         expect(streetId).to.be.equal(matchId);
     });
@@ -38,8 +50,9 @@ describe('Get Street ID', () => {
 
         nock(testApiEndpoints.host).post(testApiEndpoints.fetchStreetId).reply(200, addressMatches.matchNone);
 
-        var collection = new CollectionSchedule('Test Street', 'Nextburb', apiEndpoints);
-        var result = collection.fetchStreetId(collection.streetName, collection.suburb);
+        const address = { streetName: 'Test Street', suburb: 'Nextburb' };
+        const collection = new CollectionSchedule(address, apiEndpoints);
+        const result = collection.fetchStreetId(address.streetName, address.suburb);
 
         expect(result).to.be.rejectedWith(UnknownStreetError);
     });
@@ -48,8 +61,9 @@ describe('Get Street ID', () => {
 
         nock(testApiEndpoints.host).post(testApiEndpoints.fetchStreetId).reply(200, addressMatches.matchOne);
 
-        var collection = new CollectionSchedule('Test Street', 'Noneburb', apiEndpoints);
-        var result = collection.fetchStreetId(collection.streetName, collection.suburb);
+        const address = { streetName: 'Test Street', suburb: 'Noneburb' };
+        const collection = new CollectionSchedule(address, apiEndpoints);
+        const result = collection.fetchStreetId(collection.streetName, collection.suburb);
 
         expect(result).to.be.rejectedWith(UnknownStreetError);
     });
