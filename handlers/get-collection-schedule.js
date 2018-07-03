@@ -1,10 +1,12 @@
+const PERMISSIONS = [process.env.ALEXA_PERMISSIONS_GRANT];
+const GCP_GEOCODE_API_KEY = process.env.GCP_GEOCODE_API_KEY
+
 const messages = require('../lang/en');
 
 const { CollectionSchedule, UnknownStreetError, UnknownCollectionHtmlError } = require('../lib/wcc-rubbish');
 const { DeviceAddressHelper, MissingDeviceAddressError, DeviceAddressPermissionsNotEnabledError } = require('../lib/device-address-helper');
 const { ResponseGenerator } = require('../lib/response-generator');
 
-const GCP_GEOCODE_API_KEY = process.env.GCP_GEOCODE_API_KEY
 const googleMapsClient = require('@google/maps').createClient({
     key: GCP_GEOCODE_API_KEY, 
     Promise: Promise

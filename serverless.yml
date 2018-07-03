@@ -28,6 +28,7 @@ functions:
       WCC_API_STREETS_PATH: /layouts/wcc/GeneralLayout.aspx/GetRubbishCollectionStreets
       WCC_API_COLLECTION_SCHEDULE_PATH: /services/environment-and-waste/rubbish-and-recycling/collection-days/components/collection-search-results
       GCP_GEOCODE_API_KEY: ${ssm:alexa-wgtn-rubbish-gcp-key}
+      ALEXA_PERMISSIONS_GRANT: 'read::alexa:device:all:address'
 
 resources:
   Resources:

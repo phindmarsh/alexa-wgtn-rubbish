@@ -13,6 +13,7 @@ exports.handler = skillBuilder
         require('./handlers/get-address'),
         require('./handlers/get-collection-schedule'),
         require('./handlers/help'),
+        require('./handlers/launch'),
         require('./handlers/stop'),
         require('./handlers/unhandled'),
         require('./handlers/session-ended')

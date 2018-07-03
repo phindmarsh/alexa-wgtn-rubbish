@@ -1,4 +1,14 @@
+const GCP_GEOCODE_API_KEY = process.env.GCP_GEOCODE_API_KEY
+const PERMISSIONS = [process.env.ALEXA_PERMISSIONS_GRANT];
+
 const messages = require('../lang/en');
+
+
+const { DeviceAddressHelper, MissingDeviceAddressError, DeviceAddressPermissionsNotEnabledError } = require('../lib/device-address-helper');
+const googleMapsClient = require('@google/maps').createClient({
+    key: GCP_GEOCODE_API_KEY, 
+    Promise: Promise
+});
 
 module.exports = {
     canHandle(handlerInput) {
@@ -8,37 +18,33 @@ module.exports = {
     },
     async handle(handlerInput) {
         const { requestEnvelope, serviceClientFactory, responseBuilder } = handlerInput;
-        console.log(requestEnvelope);
-        const consentToken = requestEnvelope.context.System.user.permissions
-            && requestEnvelope.context.System.user.permissions.consentToken;
-        if (!consentToken) {
-            return responseBuilder
-                .speak(messages.NOTIFY_MISSING_PERMISSIONS)
-                .withAskForPermissionsConsentCard(PERMISSIONS)
-                .getResponse();
-        }
+        
         try {
-            const { deviceId } = requestEnvelope.context.System.device;
-            const deviceAddressServiceClient = serviceClientFactory.getDeviceAddressServiceClient();
-            const address = await deviceAddressServiceClient.getFullAddress(deviceId);
+            const deviceHelper = new DeviceAddressHelper(serviceClientFactory, googleMapsClient);
+            const address = await deviceHelper.getDeviceAddress(requestEnvelope);
+            
+            var attributes = await handlerInput.attributesManager.getPersistentAttributes();
+            attributes['address'] = address;
+            handlerInput.attributesManager.setPersistentAttributes(attributes);
+            await handlerInput.attributesManager.savePersistentAttributes();
 
-            console.log('Address successfully retrieved, now responding to user.');
-
-            let response;
-            if (address.addressLine1 === null && address.stateOrRegion === null) {
-                response = responseBuilder.speak(messages.NO_ADDRESS).getResponse();
-            } else {
-                const ADDRESS_MESSAGE = `${messages.ADDRESS_AVAILABLE + address.addressLine1}, ${address.stateOrRegion}, ${address.postalCode}`;
-                response = responseBuilder.speak(ADDRESS_MESSAGE).getResponse();
+            const ADDRESS_MESSAGE = `${messages.ADDRESS_AVAILABLE}: ${address.streetName}, ${address.suburb}`;
+            return responseBuilder.speak(ADDRESS_MESSAGE).getResponse();
+        } 
+        catch (error) {
+            console.error(error);
+            if(error instanceof DeviceAddressPermissionsNotEnabledError){
+                return responseBuilder
+                    .speak(messages.NOTIFY_MISSING_PERMISSIONS)
+                    .withAskForPermissionsConsentCard(PERMISSIONS)
+                    .getResponse();
             }
-            return response;
-        } catch (error) {
-            if (error.name !== 'ServiceError') {
-                console.error(error);
-                const response = responseBuilder.speak(messages.ERROR).getResponse();
-                return response;
+            else if(error instanceof MissingDeviceAddressError) {
+                return responseBuilder.speak(messages.NO_ADDRESS).getResponse();
             }
-            throw error;
+            else {
+                return responseBuilder.speak(messages.ERROR).getResponse();
+            }
         }
     },
 };
